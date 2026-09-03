@@ -104,6 +104,19 @@ npm run lint        # eslint
 npm run type-check  # app + worklet type-check
 ```
 
+## Deploying
+
+This is no longer a plain static site: the browser can't run `src/main.tsx`
+directly, so the host has to serve the Vite build output in `dist/`. Serving
+the repo root gives a blank page and a "MIME type of application/octet-stream"
+error for the module script.
+
+- **Cloudflare Pages (git integration)**: in the project's build settings set
+  the build command to `npm run build` and the output directory to `dist`.
+- **Cloudflare Workers**: `npm run deploy` builds and runs `wrangler deploy`
+  using `wrangler.toml`, which serves `dist/` as static assets.
+- **Anything else**: `npm run build` and upload `dist/`.
+
 ## Notes
 
 - AudioWorklet needs a user gesture, so audio starts only after pressing Play.

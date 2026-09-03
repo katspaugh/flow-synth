@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\"",
-    "type-check": "tsc --noEmit && tsc -p tsconfig.worklet.json --noEmit"
+    "type-check": "tsc --noEmit && tsc -p tsconfig.worklet.json --noEmit",
+    "deploy": "npm run build && npx wrangler deploy"
   },
   "keywords": [
     "synthesizer",
@@ -37,5 +38,8 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.50.1",
     "vite": "^7.3.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
