@@ -44,7 +44,7 @@ Open the printed URL, press **▶ Play**, then:
 | Delay     | `in`, `time`, `feedback`, `mix` | `out`        | `delayTime`, `feedback`, `mix` |
 | Rectifier | `in`                            | `out`        |                           |
 | Atten     | `in`                            | `out`        | `gain` (-1..1), `offset` (V) |
-| Output    | `in`, `inL`, `inR`              |              |                           |
+| Output    | `in`, `inL`, `inR`              |              | `drive`                   |
 
 Multiple cables into one input are summed (banana stacking). Feedback loops
 are allowed and get a one-block delay. Atten is the attenuverter every
@@ -107,8 +107,9 @@ npm run type-check  # app + worklet type-check
 ## Notes
 
 - AudioWorklet needs a user gesture, so audio starts only after pressing Play.
-- The output stage soft-clips with `tanh`, so ±5V signals come out saturated;
-  put an Atten (gain ≈ 0.3–0.5) before the output for a cleaner tone.
+- The Output module soft-clips with `tanh(signal × drive)`. At the default
+  drive of 0.2 the engine's nominal 5V lands at about 0.76 full scale, a gentle
+  rounding; turn drive up on the Output node for saturation.
 
 ## License
 

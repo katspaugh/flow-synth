@@ -46,7 +46,7 @@ export const MODULE_DESCRIPTIONS: Record<ModuleKind, string> = {
   [ModuleKind.DELAY]: 'Delay line with CV over time, feedback and mix.',
   [ModuleKind.RECTIFIER]: 'Full-wave rectifier.',
   [ModuleKind.ATTEN]: 'Attenuverter with offset: out = in × gain + offset. Negative gain inverts.',
-  [ModuleKind.OUTPUT]: 'Speakers. Feed in, or inL and inR for stereo.',
+  [ModuleKind.OUTPUT]: 'Speakers with a tanh soft clip; drive sets how hard 5V hits it.',
 };
 
 // Accent colour per kind, used for node headers and outgoing cables.

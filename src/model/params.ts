@@ -6,6 +6,7 @@ import { PAN_PARAM_KEYS } from '../worklet/modules/Pan';
 import { SLEW_PARAM_KEYS } from '../worklet/modules/Slew';
 import { VCO_PARAM_KEYS } from '../worklet/modules/VCO';
 import { ATTEN_PARAM_KEYS } from '../worklet/modules/Atten';
+import { DEFAULT_DRIVE, OUTPUT_PARAM_KEYS } from '../worklet/modules/OutputModule';
 
 export type NumberParamDef = {
   kind: 'number';
@@ -143,7 +144,16 @@ export const PARAM_DEFS: Record<ModuleKind, ParamDefMap> = {
   },
   [ModuleKind.VCA]: {},
   [ModuleKind.RECTIFIER]: {},
-  [ModuleKind.OUTPUT]: {},
+  [ModuleKind.OUTPUT]: {
+    [OUTPUT_PARAM_KEYS.DRIVE]: {
+      kind: 'number',
+      label: 'drive',
+      min: 0.05,
+      max: 1,
+      step: 0.01,
+      defaultValue: DEFAULT_DRIVE,
+    },
+  },
 };
 
 export const DEFAULT_PARAMS: Record<ModuleKind, ModuleParams | undefined> = {
@@ -155,7 +165,7 @@ export const DEFAULT_PARAMS: Record<ModuleKind, ModuleParams | undefined> = {
   [ModuleKind.ATTEN]: { gain: 0.5, offset: 0 },
   [ModuleKind.RECTIFIER]: undefined,
   [ModuleKind.VCA]: undefined,
-  [ModuleKind.OUTPUT]: undefined,
+  [ModuleKind.OUTPUT]: { drive: DEFAULT_DRIVE },
 };
 
 export const paramCount = (kind: ModuleKind): number => Object.keys(PARAM_DEFS[kind]).length;

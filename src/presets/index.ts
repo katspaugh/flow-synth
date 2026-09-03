@@ -9,8 +9,8 @@ import { NODE_WIDTH, nodeHeight } from '../model/geometry';
  *
  * Voltage conventions of the engine: VCOs and LFOs swing ±5V, a looping Slew
  * rises 0→10V, a Rectifier folds ±5V to 0→5V, 5V into a VCA's cv is unity
- * gain, and the output stage soft-clips with tanh, so ±1.5–2.5V at the
- * output is warm while ±5V is fully saturated. Atten modules scale and
+ * gain, and the Output module soft-clips with tanh scaled by its drive
+ * param (5V ≈ 0.76 full scale at the default 0.2). Atten modules scale and
  * offset CV, and with negative gain they turn a feedback loop from runaway
  * into regulation.
  */
@@ -77,7 +77,7 @@ function strangeAttractor(): Graph {
     .add('vco3', VCO, 1, { freq: 1, vcoShape: 'tri' })
     .add('rect', RECTIFIER, 2, undefined)
     .add('follower', SLEW, 2, { riseTime: 0.005, fallTime: 0.35 })
-    .add('level', ATTEN, 2, { gain: 0.5, offset: 0 })
+    .add('level', ATTEN, 2, { gain: 1, offset: 0 })
     .add('vca', VCA, 3, undefined)
     .add('delay', DELAY, 3, { delayTime: 0.37, feedback: 0.45, mix: 0.3 })
     .add('sweep', LFO, 3, { freq: -7.3, shape: 'tri' })
@@ -129,8 +129,8 @@ function axon(): Graph {
     .add('membrane', SLEW, 1, { riseTime: 0.05, fallTime: 0.6 })
     .add('chirp', ATTEN, 1, { gain: 0.4, offset: 2 })
     .add('rect', RECTIFIER, 1, undefined)
-    .add('level', ATTEN, 1, { gain: 0.4, offset: 0 })
-    .add('gate', ATTEN, 1, { gain: 0.3, offset: 1.5 })
+    .add('level', ATTEN, 1, { gain: 1, offset: 0 })
+    .add('gate', ATTEN, 1, { gain: 0.5, offset: 2.5 })
     .add('vco1', VCO, 2, { freq: 1, vcoShape: 'sine' })
     .add('vco2', VCO, 2, { freq: 0.5, vcoShape: 'tri' })
     .add('vca', VCA, 3, undefined)
@@ -180,10 +180,10 @@ function krellOuroboros(): Graph {
   p.add('loopA', SLEW, 0, { riseTime: 3.2, fallTime: 5.1 })
     .add('loopB', SLEW, 0, { riseTime: 7, fallTime: 2.3 })
     .add('spread', LFO, 0, { freq: -8.5, shape: 'sine' })
-    .add('levelA', ATTEN, 1, { gain: 0.2, offset: 0 })
-    .add('levelB', ATTEN, 1, { gain: 0.2, offset: 0 })
+    .add('levelA', ATTEN, 1, { gain: 0.5, offset: 0 })
+    .add('levelB', ATTEN, 1, { gain: 0.5, offset: 0 })
     .add('glide', ATTEN, 1, { gain: 0.12, offset: 0 })
-    .add('subLevel', ATTEN, 1, { gain: 0.3, offset: 0 })
+    .add('subLevel', ATTEN, 1, { gain: 0.6, offset: 0 })
     .add('vco1', VCO, 2, { freq: 2, vcoShape: 'sine' })
     .add('vco2', VCO, 2, { freq: 2.58, vcoShape: 'sine' })
     .add('sub', VCO, 2, { freq: 1, vcoShape: 'tri' })
@@ -234,17 +234,17 @@ function krellOuroboros(): Graph {
 function homeostat(): Graph {
   const p = new PatchBuilder();
   p.add('disturb', LFO, 0, { freq: -6.5, shape: 'tri' })
-    .add('disturbAmt', ATTEN, 0, { gain: 0.3, offset: 0 })
+    .add('disturbAmt', ATTEN, 0, { gain: 0.5, offset: 0 })
     .add('vcoA', VCO, 1, { freq: 2, vcoShape: 'saw' })
     .add('vcoB', VCO, 1, { freq: 2.58, vcoShape: 'square' })
     .add('vcaA', VCA, 2, undefined)
     .add('vcaB', VCA, 2, undefined)
     .add('rectA', RECTIFIER, 3, undefined)
     .add('followA', SLEW, 3, { riseTime: 0.3, fallTime: 1.2 })
-    .add('inhibitB', ATTEN, 3, { gain: -0.6, offset: 2.5 })
+    .add('inhibitB', ATTEN, 3, { gain: -1, offset: 5 })
     .add('rectB', RECTIFIER, 3, undefined)
     .add('followB', SLEW, 3, { riseTime: 0.3, fallTime: 1.2 })
-    .add('inhibitA', ATTEN, 3, { gain: -0.6, offset: 2.5 })
+    .add('inhibitA', ATTEN, 3, { gain: -1, offset: 5 })
     .add('delay', DELAY, 4, { delayTime: 0.33, feedback: 0.4, mix: 0.35 })
     .add('panA', PAN, 5, { pan: -0.6 })
     .add('panB', PAN, 5, { pan: 0.6 })
@@ -296,7 +296,7 @@ function rectifiedReflex(): Graph {
     .add('vco', VCO, 1, { freq: 2.3, vcoShape: 'tri' })
     .add('rect', RECTIFIER, 1, undefined)
     .add('reflex', ATTEN, 1, { gain: 0.6, offset: 0 })
-    .add('level', ATTEN, 2, { gain: 0.4, offset: 0 })
+    .add('level', ATTEN, 2, { gain: 1, offset: 0 })
     .add('delay', DELAY, 2, { delayTime: 0.12, feedback: 0.7, mix: 0.4 })
     .add('rect2', RECTIFIER, 3, undefined)
     .add('follower', SLEW, 3, { riseTime: 0.01, fallTime: 0.5 })

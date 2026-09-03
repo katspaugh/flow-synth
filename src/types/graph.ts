@@ -24,6 +24,7 @@ export interface ModuleParams {
   mix?: number;
   gain?: number;
   offset?: number;
+  drive?: number;
 }
 
 export interface ModuleDefinition {

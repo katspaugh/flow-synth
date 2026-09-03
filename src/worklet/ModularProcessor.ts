@@ -309,6 +309,7 @@ export class ModularProcessor extends AudioWorkletProcessor {
       const rightSource =
         hasRight && outputModule.inputs.inR ? outputModule.inputs.inR : outputModule.outputs.out;
       const hasStereoInputs = hasLeft || hasRight;
+      const drive = outputModule.drive;
 
       // Apply soft clipping (tanh) to prevent harsh clipping
       for (let i = 0; i < 128; i++) {
@@ -325,9 +326,9 @@ export class ModularProcessor extends AudioWorkletProcessor {
           right = rightSource ? rightSource[i] : left;
         }
 
-        output[0][i] = Math.tanh(left);
+        output[0][i] = Math.tanh(left * drive);
         if (output[1]) {
-          output[1][i] = Math.tanh(right);
+          output[1][i] = Math.tanh(right * drive);
         }
       }
     } else if (output && output[0]) {
