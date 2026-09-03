@@ -1,8 +1,7 @@
 import type { Graph } from '../types/graph';
 import { isModuleKind } from './ports';
 
-// Patches are shared as base64url-encoded JSON in the URL fragment. The format
-// is the same one aumlet used, so its share links still open here.
+// Patches are shared as base64url-encoded JSON in the URL fragment.
 
 const base64UrlEncode = (bytes: Uint8Array): string => {
   let binary = '';

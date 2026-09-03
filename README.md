@@ -1,8 +1,8 @@
 # Flow Synth
 
 Node-based modular synthesizer for the browser. The whole patch runs inside a
-single `AudioWorkletProcessor` (the engine from [aumlet](https://github.com/katspaugh/aumlet));
-the canvas UI is a React port of the board from [SpaceNotes](https://github.com/katspaugh/spacenotes).
+single `AudioWorkletProcessor`; the canvas UI is a React port of the board from
+[SpaceNotes](https://github.com/katspaugh/spacenotes).
 
 ## Usage
 
@@ -78,8 +78,8 @@ The UI is a plain model–view–controller split; the DOM is never the source o
   - `ports.ts`, `params.ts`: per-module port lists, parameter ranges and defaults.
   - `geometry.ts`: node sizes and port anchor positions derived from the model, so
     cables are drawn without measuring the DOM.
-  - `layout.ts`: auto-layout for patches that carry no positions (e.g. random or aumlet links).
-  - `hash.ts`: URL-fragment serialization (compatible with aumlet share links).
+  - `layout.ts`: auto-layout for patches that carry no positions (e.g. random ones).
+  - `hash.ts`: URL-fragment serialization for share links.
 - **Controller** — `src/hooks/`
   - `useGraphState.ts`: owns the graph and exposes the actions views dispatch.
   - `useAudioEngine.ts`: AudioWorklet lifecycle. Adding/removing modules or
@@ -90,9 +90,9 @@ The UI is a plain model–view–controller split; the DOM is never the source o
     SpaceNotes canvas, adapted to port-to-port cables.
   - `ModuleCard.tsx`, `board/Port.tsx`, `Scope.tsx`: a module node with ports,
     sliders and a live oscilloscope.
-- **Engine** — `src/worklet/`: aumlet's `ModularProcessor` and DSP modules, plus a
-  `setParam` message (modules re-read params in place via `applyParams`) and
-  the Atten module.
+- **Engine** — `src/worklet/`: `ModularProcessor` runs every module's DSP in one
+  AudioWorklet, with a `setParam` message that lets modules re-read params in
+  place via `applyParams`.
 
 ## Scripts
 
