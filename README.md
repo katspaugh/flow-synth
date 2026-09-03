@@ -107,15 +107,20 @@ npm run type-check  # app + worklet type-check
 ## Deploying
 
 This is no longer a plain static site: the browser can't run `src/main.tsx`
-directly, so the host has to serve the Vite build output in `dist/`. Serving
+directly, so the host has to run `npm run build` and serve `dist/`. Serving
 the repo root gives a blank page and a "MIME type of application/octet-stream"
 error for the module script.
 
-- **Cloudflare Pages (git integration)**: in the project's build settings set
-  the build command to `npm run build` and the output directory to `dist`.
-- **Cloudflare Workers**: `npm run deploy` builds and runs `wrangler deploy`
-  using `wrangler.toml`, which serves `dist/` as static assets.
-- **Anything else**: `npm run build` and upload `dist/`.
+**Cloudflare Pages (git integration)**, which is what smod.pages.dev uses:
+the build command is a dashboard setting. In the Pages project go to
+*Settings → Builds & deployments → Build configuration* and set the build
+command to `npm run build`, then retry the latest deployment. The output
+directory comes from `wrangler.toml` (`pages_build_output_dir = "dist"`) and
+the Node version from `.node-version`, so nothing else needs configuring.
+
+**From a terminal**: `npm run deploy` builds and runs `wrangler pages deploy dist`.
+
+**Anything else**: `npm run build` and upload `dist/`.
 
 ## Notes
 

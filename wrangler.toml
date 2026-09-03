@@ -1,3 +1,5 @@
-name = "flow-synth"
+name = "smod"
 compatibility_date = "2025-03-01"
-assets = { directory = "./dist" }
+# Cloudflare Pages reads the output directory from here. The build command
+# itself is a dashboard setting: set it to `npm run build`.
+pages_build_output_dir = "dist"
