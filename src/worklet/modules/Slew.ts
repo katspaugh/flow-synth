@@ -15,6 +15,13 @@ export class Slew extends Module {
     super(id, kind, params);
     this.value = 0;
     this.rising = true;
+    this.riseTime = 0.5;
+    this.fallTime = 0.5;
+    this.applyParams();
+  }
+
+  protected override applyParams(): void {
+    const params = this.params;
     // Ensure minimum times to prevent division by zero/near-zero
     this.riseTime = params.riseTime !== undefined ? Math.max(0.001, params.riseTime) : 0.5;
     this.fallTime = params.fallTime !== undefined ? Math.max(0.001, params.fallTime) : 0.5;

@@ -17,6 +17,14 @@ export class VCO extends Module {
   constructor(id: string, kind: string, params: ModuleParams) {
     super(id, kind, params);
     this.phase = 0;
+    this.freq = 0;
+    this.fmSensitivity = 50;
+    this.shape = 'saw';
+    this.applyParams();
+  }
+
+  protected override applyParams(): void {
+    const params = this.params;
     this.freq = params.freq !== undefined ? params.freq : 0; // Default to 0V (C1)
     this.fmSensitivity = params.fmSensitivity || 50;
     this.shape = (params.vcoShape as 'sine' | 'tri' | 'saw' | 'square') || 'saw';

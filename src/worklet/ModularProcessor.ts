@@ -8,6 +8,7 @@ import { Slew } from './modules/Slew';
 import { Pan } from './modules/Pan';
 import { Delay } from './modules/Delay';
 import { Rectifier } from './modules/Rectifier';
+import { Atten } from './modules/Atten';
 import { OutputModule } from './modules/OutputModule';
 
 export class ModularProcessor extends AudioWorkletProcessor {
@@ -29,6 +30,10 @@ export class ModularProcessor extends AudioWorkletProcessor {
   }
 
   handleMsg(msg: WorkletMessage): void {
+    if (msg.type === 'setParam') {
+      this.modules.get(msg.id)?.setParam(msg.param, msg.value);
+      return;
+    }
     if (msg.type === 'loadGraph') {
       try {
         this.loadGraph(msg.graph);
@@ -72,6 +77,7 @@ export class ModularProcessor extends AudioWorkletProcessor {
       PAN: Pan,
       DELAY: Delay,
       RECTIFIER: Rectifier,
+      ATTEN: Atten,
       OUTPUT: OutputModule,
     };
 
@@ -178,6 +184,7 @@ export class ModularProcessor extends AudioWorkletProcessor {
       PAN: ['in', 'pan'],
       DELAY: ['in', 'time', 'feedback', 'mix'],
       RECTIFIER: ['in'],
+      ATTEN: ['in'],
       OUTPUT: ['in', 'inL', 'inR'],
     };
     return ports[kind] || [];
@@ -192,6 +199,7 @@ export class ModularProcessor extends AudioWorkletProcessor {
       PAN: ['outL', 'outR'],
       DELAY: ['out'],
       RECTIFIER: ['out'],
+      ATTEN: ['out'],
       OUTPUT: ['out'],
     };
     return ports[kind] || [];

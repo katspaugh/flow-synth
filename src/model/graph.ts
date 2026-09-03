@@ -44,6 +44,7 @@ const BYPASS_INPUTS: Partial<Record<ModuleKind, string[]>> = {
   [ModuleKind.DELAY]: ['in'],
   [ModuleKind.RECTIFIER]: ['in'],
   [ModuleKind.SLEW]: ['in'],
+  [ModuleKind.ATTEN]: ['in'],
 };
 
 /**

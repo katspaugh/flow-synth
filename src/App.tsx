@@ -8,6 +8,7 @@ import { NODE_WIDTH } from './model/geometry';
 import { deserializeGraphFromHash, serializeGraphToHash } from './model/hash';
 import { freePosition } from './model/layout';
 import { generateBinauralGraph, generateRandomGraph } from './utils/randomGraph';
+import { PRESETS, presetGraph } from './presets';
 
 const HASH_SYNC_DELAY = 300;
 
@@ -45,6 +46,16 @@ export function App() {
       engine.setStatus({ message: 'Randomized patch.', type: 'info' });
     }
   }, [state, binauralEnabled, engine]);
+
+  const onLoadPreset = useCallback(
+    (name: string) => {
+      const preset = PRESETS.find((p) => p.name === name);
+      if (!preset) return;
+      state.loadGraph(presetGraph(preset));
+      engine.setStatus({ message: `${preset.name}: ${preset.description}`, type: 'info' });
+    },
+    [state, engine]
+  );
 
   const onShare = useCallback(async () => {
     const hash = serializeGraphToHash(state.graph);
@@ -99,6 +110,7 @@ export function App() {
         onAddModule={onAddModule}
         onRandomize={onRandomize}
         onToggleBinaural={setBinauralEnabled}
+        onLoadPreset={onLoadPreset}
         onShare={onShare}
       />
     </>

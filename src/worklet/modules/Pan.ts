@@ -12,7 +12,12 @@ export class Pan extends Module {
 
   constructor(id: string, kind: string, params: ModuleParams) {
     super(id, kind, params);
-    this.pan = params.pan !== undefined ? params.pan : 0;
+    this.pan = 0;
+    this.applyParams();
+  }
+
+  protected override applyParams(): void {
+    this.pan = this.params.pan !== undefined ? this.params.pan : 0;
   }
 
   process(): void {

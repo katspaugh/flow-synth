@@ -23,7 +23,10 @@ Open the printed URL, press **▶ Play**, then:
   selection moves together.
 - **Delete modules** with the `×` in the header, or select and press
   `Delete` / `Backspace`.
-- **Tweak parameters** with the sliders and selects inside each node.
+- **Tweak parameters** with the sliders and selects inside each node. Changes
+  go to the engine live; nothing is rebuilt, so oscillators keep their phase
+  and delays keep their tails.
+- **Demo patches** loads one of the feedback patches described below.
 - **Randomize** generates a new patch (tick **Binaural** for a slow stereo drone).
 - **Share** copies a link; the URL always tracks the current patch, so a
   reload restores it.
@@ -40,10 +43,31 @@ Open the printed URL, press **▶ Play**, then:
 | Pan       | `in`, `pan`                     | `outL`,`outR`| `pan`                     |
 | Delay     | `in`, `time`, `feedback`, `mix` | `out`        | `delayTime`, `feedback`, `mix` |
 | Rectifier | `in`                            | `out`        |                           |
+| Atten     | `in`                            | `out`        | `gain` (-1..1), `offset` (V) |
 | Output    | `in`, `inL`, `inR`              |              |                           |
 
 Multiple cables into one input are summed (banana stacking). Feedback loops
-are allowed and get a one-block delay.
+are allowed and get a one-block delay. Atten is the attenuverter every
+Serge-style patch needs: it scales and offsets CV, and with negative gain it
+turns a feedback loop from runaway into regulation.
+
+## Demo patches
+
+Patches built from feedback rather than sequencing, after Serge patch
+programming and cybernetics (`src/presets/index.ts`):
+
+- **Strange Attractor** — three VCOs FM each other in a ring, one also
+  modulating itself; the patch's own energy, rectified and slewed, opens the VCA.
+- **Axon** — a square LFO is a spike train; its output travels down a delay
+  line used as an axon and arrives back at its own rate input, so each burst
+  re-times the next. The integrated "membrane potential" chirps a voice.
+- **Krell Ouroboros** — two unpatched slews loop at unrelated periods and
+  fade chords in and out; the delay's level is inverted into its own feedback,
+  so quiet passages ring on and loud ones damp themselves.
+- **Homeostat** — after Ashby: two voices in mutual inhibition, each follower
+  inverted into the other's VCA, kept from settling by a slow disturbance.
+- **Rectified Reflex** — a VCO rectified into its own FM input, dragged
+  through regimes by a saw LFO; the delay's wetness follows its own level.
 
 ## Architecture
 
@@ -58,14 +82,17 @@ The UI is a plain model–view–controller split; the DOM is never the source o
   - `hash.ts`: URL-fragment serialization (compatible with aumlet share links).
 - **Controller** — `src/hooks/`
   - `useGraphState.ts`: owns the graph and exposes the actions views dispatch.
-  - `useAudioEngine.ts`: AudioWorklet lifecycle; reloads the engine only when the
-    audio-relevant part of the graph changes (moving nodes never touches it).
+  - `useAudioEngine.ts`: AudioWorklet lifecycle. Adding/removing modules or
+    cables reloads the engine graph; parameter edits are diffed into `setParam`
+    messages; moving nodes never touches it.
 - **View** — `src/components/`
   - `board/Board.tsx`, `DraggableNode.tsx`, `Edge.tsx`, `SelectionBox.tsx`: the
     SpaceNotes canvas, adapted to port-to-port cables.
   - `ModuleCard.tsx`, `board/Port.tsx`, `Scope.tsx`: a module node with ports,
     sliders and a live oscilloscope.
-- **Engine** — `src/worklet/`: the unchanged aumlet `ModularProcessor` and DSP modules.
+- **Engine** — `src/worklet/`: aumlet's `ModularProcessor` and DSP modules, plus a
+  `setParam` message (modules re-read params in place via `applyParams`) and
+  the Atten module.
 
 ## Scripts
 
@@ -80,8 +107,8 @@ npm run type-check  # app + worklet type-check
 ## Notes
 
 - AudioWorklet needs a user gesture, so audio starts only after pressing Play.
-- Changing a parameter rebuilds the engine graph (oscillator phases and delay
-  buffers reset); updates are coalesced so slider drags don't thrash it.
+- The output stage soft-clips with `tanh`, so ±5V signals come out saturated;
+  put an Atten (gain ≈ 0.3–0.5) before the output for a cleaner tone.
 
 ## License
 

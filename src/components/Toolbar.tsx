@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 import { ModuleKind } from '../types/graph';
 import type { EngineStatus } from '../hooks/useAudioEngine';
 import { MODULE_COLORS, MODULE_DESCRIPTIONS, MODULE_LABELS } from '../model/ports';
+import { PRESETS } from '../presets';
 
 type ToolbarProps = {
   isRunning: boolean;
@@ -11,6 +12,7 @@ type ToolbarProps = {
   onAddModule: (kind: ModuleKind) => void;
   onRandomize: () => void;
   onToggleBinaural: (enabled: boolean) => void;
+  onLoadPreset: (name: string) => void;
   onShare: () => void;
 };
 
@@ -51,6 +53,23 @@ export function Toolbar(props: ToolbarProps) {
       </div>
 
       <div className="ToolbarGroup">
+        <select
+          className="PresetSelect"
+          value=""
+          title="Load a demo patch"
+          onChange={(e) => {
+            if (e.target.value) props.onLoadPreset(e.target.value);
+          }}
+        >
+          <option value="" disabled>
+            Demo patches…
+          </option>
+          {PRESETS.map((preset) => (
+            <option key={preset.name} value={preset.name} title={preset.description}>
+              {preset.name}
+            </option>
+          ))}
+        </select>
         <label className="Toggle" title="Randomize into a slow stereo drone">
           <input
             type="checkbox"

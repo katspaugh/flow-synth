@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Graph } from '../types/graph';
-import type { ScopeDataMessage, WorkletMessage } from '../types/messages';
+import type { Graph, ModuleParams } from '../types/graph';
+import type { ScopeDataMessage, SetParamMessage, WorkletMessage } from '../types/messages';
 import { toEngineGraph } from '../model/graph';
 
 export type StatusType = 'info' | 'success' | 'error';
@@ -23,21 +23,52 @@ export function useAudioEngine(graph: Graph) {
   const [scopeData, setScopeData] = useState<Record<string, number[]>>({});
 
   const engineGraph = useMemo(() => toEngineGraph(graph), [graph]);
-  const engineKey = useMemo(() => JSON.stringify(engineGraph), [engineGraph]);
   const latestGraph = useRef(engineGraph);
   latestGraph.current = engineGraph;
+  // Params the engine currently holds, per module id. Used to diff parameter
+  // edits into cheap setParam messages instead of a full graph rebuild.
+  const sentParams = useRef<Map<string, ModuleParams | undefined>>(new Map());
 
   const postGraph = useCallback(() => {
-    modularNode.current?.port.postMessage({ type: 'loadGraph', graph: latestGraph.current });
+    const node = modularNode.current;
+    if (!node) return;
+    node.port.postMessage({ type: 'loadGraph', graph: latestGraph.current });
+    sentParams.current = new Map(latestGraph.current.modules.map((m) => [m.id, m.params]));
   }, []);
 
+  // Anything the worklet has to rebuild for: the set of modules and the cables.
+  const structureKey = useMemo(
+    () =>
+      JSON.stringify({
+        modules: engineGraph.modules.map(({ id, kind }) => ({ id, kind })),
+        connections: engineGraph.connections,
+      }),
+    [engineGraph]
+  );
+  const lastStructureKey = useRef(structureKey);
+
   useEffect(() => {
-    if (!modularNode.current) return;
-    // Slider drags fire many updates; coalesce them so the engine isn't
-    // rebuilt on every pixel.
-    const timer = setTimeout(postGraph, 40);
-    return () => clearTimeout(timer);
-  }, [engineKey, postGraph]);
+    const node = modularNode.current;
+    if (!node) return;
+
+    if (structureKey !== lastStructureKey.current) {
+      lastStructureKey.current = structureKey;
+      postGraph();
+      return;
+    }
+
+    for (const module of engineGraph.modules) {
+      const previous = sentParams.current.get(module.id);
+      if (previous === module.params) continue;
+      for (const [param, value] of Object.entries(module.params ?? {})) {
+        if (value === undefined) continue;
+        if ((previous as Record<string, unknown> | undefined)?.[param] === value) continue;
+        const message: SetParamMessage = { type: 'setParam', id: module.id, param, value };
+        node.port.postMessage(message);
+      }
+      sentParams.current.set(module.id, module.params);
+    }
+  }, [engineGraph, structureKey, postGraph]);
 
   const start = useCallback(async () => {
     try {
@@ -85,6 +116,7 @@ export function useAudioEngine(graph: Graph) {
       modularNode.current = node;
 
       setStatus({ message: 'Loading graph...', type: 'info' });
+      lastStructureKey.current = structureKey;
       postGraph();
 
       if (ctx.state !== 'running') {
@@ -96,7 +128,7 @@ export function useAudioEngine(graph: Graph) {
       const message = err instanceof Error ? err.message : 'Unknown error';
       setStatus({ message: `Error: ${message}`, type: 'error' });
     }
-  }, [postGraph]);
+  }, [postGraph, structureKey]);
 
   const stop = useCallback(() => {
     if (modularNode.current) {

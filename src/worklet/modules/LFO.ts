@@ -16,6 +16,13 @@ export class LFO extends Module {
   constructor(id: string, kind: string, params: ModuleParams) {
     super(id, kind, params);
     this.phase = 0;
+    this.freq = -5;
+    this.shape = 'sine';
+    this.applyParams();
+  }
+
+  protected override applyParams(): void {
+    const params = this.params;
     this.freq = params.freq !== undefined ? params.freq : -5; // Default to -5V (~1Hz)
     this.shape = (params.shape as 'sine' | 'tri' | 'saw' | 'square') || 'sine';
   }

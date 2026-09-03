@@ -5,6 +5,13 @@ export interface LoadGraphMessage {
   graph: Graph;
 }
 
+export interface SetParamMessage {
+  type: 'setParam';
+  id: string;
+  param: string;
+  value: number | string;
+}
+
 export interface GraphLoadedMessage {
   type: 'graphLoaded';
   success: true;
@@ -26,4 +33,4 @@ export interface ScopeDataMessage {
 }
 
 export type WorkletMessage =
-  LoadGraphMessage | GraphLoadedMessage | ErrorMessage | ScopeDataMessage;
+  LoadGraphMessage | SetParamMessage | GraphLoadedMessage | ErrorMessage | ScopeDataMessage;

@@ -6,6 +6,7 @@ export enum ModuleKind {
   PAN = 'PAN',
   DELAY = 'DELAY',
   RECTIFIER = 'RECTIFIER',
+  ATTEN = 'ATTEN',
   OUTPUT = 'OUTPUT',
 }
 
@@ -21,6 +22,8 @@ export interface ModuleParams {
   delayTime?: number;
   feedback?: number;
   mix?: number;
+  gain?: number;
+  offset?: number;
 }
 
 export interface ModuleDefinition {

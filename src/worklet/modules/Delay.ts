@@ -24,6 +24,14 @@ export class Delay extends Module {
     this.maxSamples = Math.max(1, Math.floor(sr * 2));
     this.buffer = new Float32Array(this.maxSamples);
     this.writeIndex = 0;
+    this.delayTime = 0.25;
+    this.feedback = 0.35;
+    this.mix = 0.4;
+    this.applyParams();
+  }
+
+  protected override applyParams(): void {
+    const params = this.params;
     this.delayTime = params.delayTime !== undefined ? params.delayTime : 0.25;
     this.feedback = params.feedback !== undefined ? params.feedback : 0.35;
     this.mix = params.mix !== undefined ? params.mix : 0.4;

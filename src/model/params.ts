@@ -5,6 +5,7 @@ import { LFO_PARAM_KEYS } from '../worklet/modules/LFO';
 import { PAN_PARAM_KEYS } from '../worklet/modules/Pan';
 import { SLEW_PARAM_KEYS } from '../worklet/modules/Slew';
 import { VCO_PARAM_KEYS } from '../worklet/modules/VCO';
+import { ATTEN_PARAM_KEYS } from '../worklet/modules/Atten';
 
 export type NumberParamDef = {
   kind: 'number';
@@ -121,6 +122,25 @@ export const PARAM_DEFS: Record<ModuleKind, ParamDefMap> = {
       defaultValue: 0.4,
     },
   },
+  [ModuleKind.ATTEN]: {
+    [ATTEN_PARAM_KEYS.GAIN]: {
+      kind: 'number',
+      label: 'gain',
+      min: -1,
+      max: 1,
+      step: 0.01,
+      defaultValue: 0.5,
+    },
+    [ATTEN_PARAM_KEYS.OFFSET]: {
+      kind: 'number',
+      label: 'offset',
+      min: -5,
+      max: 5,
+      step: 0.05,
+      defaultValue: 0,
+      unit: 'V',
+    },
+  },
   [ModuleKind.VCA]: {},
   [ModuleKind.RECTIFIER]: {},
   [ModuleKind.OUTPUT]: {},
@@ -132,6 +152,7 @@ export const DEFAULT_PARAMS: Record<ModuleKind, ModuleParams | undefined> = {
   [ModuleKind.SLEW]: { riseTime: 0.5, fallTime: 0.5 },
   [ModuleKind.PAN]: { pan: 0 },
   [ModuleKind.DELAY]: { delayTime: 0.25, feedback: 0.35, mix: 0.4 },
+  [ModuleKind.ATTEN]: { gain: 0.5, offset: 0 },
   [ModuleKind.RECTIFIER]: undefined,
   [ModuleKind.VCA]: undefined,
   [ModuleKind.OUTPUT]: undefined,

@@ -27,6 +27,18 @@ export abstract class Module {
 
   abstract process(): void;
 
+  /**
+   * Live parameter update from the UI. Subclasses that cache params in
+   * fields override applyParams() to re-read them; there is no rebuild, so
+   * oscillator phases and delay buffers survive the change.
+   */
+  setParam(key: string, value: number | string): void {
+    (this.params as Record<string, number | string>)[key] = value;
+    this.applyParams();
+  }
+
+  protected applyParams(): void {}
+
   getScratchBuffer(): Float32Array {
     if (!this.scratchBuffers.has('temp')) {
       this.scratchBuffers.set('temp', new Float32Array(128));
