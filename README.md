@@ -112,11 +112,10 @@ the repo root gives a blank page and a "MIME type of application/octet-stream"
 error for the module script.
 
 **Cloudflare Pages (git integration)**, which is what smod.pages.dev uses:
-the build command is a dashboard setting. In the Pages project go to
-*Settings → Builds & deployments → Build configuration* and set the build
-command to `npm run build`, then retry the latest deployment. The output
-directory comes from `wrangler.toml` (`pages_build_output_dir = "dist"`) and
-the Node version from `.node-version`, so nothing else needs configuring.
+in the Pages project go to *Settings → Builds & deployments → Build
+configuration* and set the build command to `npm run build` and the build
+output directory to `dist`, then retry the latest deployment. `.node-version`
+pins Node 22 so Vite can build there.
 
 **From a terminal**: `npm run deploy` builds and runs `wrangler pages deploy dist`.
 
