@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "target": "ES2020",
+    "module": "ESNext",
+    "noEmit": true,
+    "types": []
+  },
+  "include": ["src/worklet/**/*", "src/types/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
