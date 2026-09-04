@@ -1,15 +1,136 @@
-# Simple Modular Synth
+# Flow Synth
 
-[Live demo](https://smod.pages.dev/#eyJtb2R1bGVzIjpbeyJpZCI6InNwZWFrZXJzLTAiLCJ0eXBlIjoic3BlYWtlcnMiLCJ4IjoxMDU3LCJ5IjoyNjV9LHsiaWQiOiJsb3dwYXNzLTE3MDU3ODMzNzM1MzEiLCJ0eXBlIjoibG93cGFzcyIsIngiOjY3MSwieSI6MjM0fSx7ImlkIjoiY2xvY2stMTcwNTc4NDQ2NDQxOCIsInR5cGUiOiJjbG9jayIsIngiOjQyMCwieSI6MzgwfSx7ImlkIjoidHJpYW5nbGUtMTcwNTc4NjM3MTQyMiIsInR5cGUiOiJ0cmlhbmdsZSIsIngiOjMzOCwieSI6OTV9LHsiaWQiOiJkZWxheS0xNzA1Nzg2NzE5NzA0IiwidHlwZSI6ImRlbGF5IiwieCI6Nzc2LCJ5Ijo2N30seyJpZCI6InBhbm5lci0xNzA1Nzg2NzUwNDc4IiwidHlwZSI6InBhbm5lciIsIngiOjEwMDcsInkiOjEyMH0seyJpZCI6InBhbm5lci0xNzA1Nzg2NzU5MTQ1IiwidHlwZSI6InBhbm5lciIsIngiOjk5MCwieSI6MzgzfSx7ImlkIjoic2FtcGxlQW5kSG9sZC0xNzA1Nzg2OTM3NTE1IiwidHlwZSI6InNhbXBsZUFuZEhvbGQiLCJ4IjoxMzYsInkiOjIwN30seyJpZCI6Imxmby0xNzA1Nzg3MDMzMzU1IiwidHlwZSI6ImxmbyIsIngiOjk1OCwieSI6MjV9LHsiaWQiOiJ3YXZlZm9ybS0xNzA1Nzg3MDkwMDY2IiwidHlwZSI6IndhdmVmb3JtIiwieCI6NzA5LCJ5Ijo0NTN9XSwiY29ubmVjdGlvbnMiOlt7ImZyb20iOiJ0cmlhbmdsZS0xNzA1Nzg2MzcxNDIyLW91dHB1dCIsInRvIjoibG93cGFzcy0xNzA1NzgzMzczNTMxLWlucHV0LTAifSx7ImZyb20iOiJsb3dwYXNzLTE3MDU3ODMzNzM1MzEtb3V0cHV0IiwidG8iOiJkZWxheS0xNzA1Nzg2NzE5NzA0LWlucHV0LTAifSx7ImZyb20iOiJkZWxheS0xNzA1Nzg2NzE5NzA0LW91dHB1dCIsInRvIjoicGFubmVyLTE3MDU3ODY3NTA0NzgtaW5wdXQtMCJ9LHsiZnJvbSI6InBhbm5lci0xNzA1Nzg2NzUwNDc4LW91dHB1dCIsInRvIjoic3BlYWtlcnMtMC1pbnB1dC0wIn0seyJmcm9tIjoibG93cGFzcy0xNzA1NzgzMzczNTMxLW91dHB1dCIsInRvIjoicGFubmVyLTE3MDU3ODY3NTkxNDUtaW5wdXQtMCJ9LHsiZnJvbSI6InBhbm5lci0xNzA1Nzg2NzU5MTQ1LW91dHB1dCIsInRvIjoic3BlYWtlcnMtMC1pbnB1dC0wIn0seyJmcm9tIjoic2FtcGxlQW5kSG9sZC0xNzA1Nzg2OTM3NTE1LW91dHB1dCIsInRvIjoidHJpYW5nbGUtMTcwNTc4NjM3MTQyMi1pbnB1dC0wIn0seyJmcm9tIjoidHJpYW5nbGUtMTcwNTc4NjM3MTQyMi1vdXRwdXQiLCJ0byI6InNhbXBsZUFuZEhvbGQtMTcwNTc4NjkzNzUxNS1pbnB1dC0wIn0seyJmcm9tIjoiY2xvY2stMTcwNTc4NDQ2NDQxOC1vdXRwdXQiLCJ0byI6InNhbXBsZUFuZEhvbGQtMTcwNTc4NjkzNzUxNS1pbnB1dC0xIn0seyJmcm9tIjoiY2xvY2stMTcwNTc4NDQ2NDQxOC1vdXRwdXQiLCJ0byI6Imxvd3Bhc3MtMTcwNTc4MzM3MzUzMS1pbnB1dC0xIn0seyJmcm9tIjoiY2xvY2stMTcwNTc4NDQ2NDQxOC1vdXRwdXQiLCJ0byI6Imxvd3Bhc3MtMTcwNTc4MzM3MzUzMS1pbnB1dC0yIn0seyJmcm9tIjoidHJpYW5nbGUtMTcwNTc4NjM3MTQyMi1vdXRwdXQiLCJ0byI6ImRlbGF5LTE3MDU3ODY3MTk3MDQtaW5wdXQtMSJ9LHsiZnJvbSI6Imxmby0xNzA1Nzg3MDMzMzU1LW91dHB1dCIsInRvIjoicGFubmVyLTE3MDU3ODY3NTA0NzgtaW5wdXQtMSJ9LHsiZnJvbSI6ImNsb2NrLTE3MDU3ODQ0NjQ0MTgtb3V0cHV0IiwidG8iOiJwYW5uZXItMTcwNTc4Njc1OTE0NS1pbnB1dC0xIn0seyJmcm9tIjoibG93cGFzcy0xNzA1NzgzMzczNTMxLW91dHB1dCIsInRvIjoid2F2ZWZvcm0tMTcwNTc4NzA5MDA2Ni1pbnB1dC0wIn1dfQ==)
+Node-based modular synthesizer for the browser. The whole patch runs inside a
+single `AudioWorkletProcessor`; the canvas UI is a React port of the board from
+[SpaceNotes](https://github.com/katspaugh/spacenotes).
+
+[Live demo](https://smod.pages.dev/)
 
 ## Usage
 
-1. Checkout the repo
-2. Start a local web server, e.g. `python3 -m http.server --cgi 8080`
-3. Open http://localhost:8080/ in the browser
-4. Create modules by clicking anywhere on empty space and typing the name of a module
-4. Connect modules by clicking on little circles representing their inputs (on the left) and outputs (on the right)
-5. Remove connections by clicking on connecting lines (patch cables)
-6. Remove modules by dragging them off the screen
+```bash
+npm install
+npm run dev
+```
 
-<img width="835" alt="Screenshot 2024-01-30 at 20 08 30" src="https://github.com/katspaugh/wavesurfer.js/assets/381895/506398c8-2638-4e33-b7c6-f54edf850fc7">
+Open the printed URL, press **▶ Play**, then:
+
+- **Add modules** with the toolbar buttons, or double-click empty canvas to
+  pick one at that spot.
+- **Patch cables** by clicking an output port (right side of a node) and then
+  an input port (left side). Clicking a node body while a cable is pending
+  patches into its first matching port. `Esc` cancels.
+- **Remove a cable** by clicking it.
+- **Move modules** by dragging. Drag on empty canvas to box-select; a
+  selection moves together.
+- **Delete modules** with the `×` in the header, or select and press
+  `Delete` / `Backspace`.
+- **Tweak parameters** with the sliders and selects inside each node. Changes
+  go to the engine live; nothing is rebuilt, so oscillators keep their phase
+  and delays keep their tails.
+- **Demo patches** loads one of the feedback patches described below.
+- **Randomize** generates a new patch (tick **Binaural** for a slow stereo drone).
+- **Share** copies a link; the URL always tracks the current patch, so a
+  reload restores it.
+- `Cmd/Ctrl+Enter` reloads the graph into the engine.
+
+## Modules
+
+| Module    | Inputs                          | Outputs      | Params                    |
+| --------- | ------------------------------- | ------------ | ------------------------- |
+| VCO       | `pitch` (1V/oct), `fm` (linear) | `out`        | `freq` (V), `shape`       |
+| VCA       | `in`, `cv` (5V = unity)         | `out`        |                           |
+| LFO       | `rate` (1V/oct)                 | `out`        | `freq` (V), `shape`       |
+| Slew      | `in` (loops if unpatched)       | `out`        | `riseTime`, `fallTime`    |
+| Pan       | `in`, `pan`                     | `outL`,`outR`| `pan`                     |
+| Delay     | `in`, `time`, `feedback`, `mix` | `out`        | `delayTime`, `feedback`, `mix` |
+| Rectifier | `in`                            | `out`        |                           |
+| Atten     | `in`                            | `out`        | `gain` (-1..1), `offset` (V) |
+| Output    | `in`, `inL`, `inR`              |              | `drive`                   |
+
+Multiple cables into one input are summed (banana stacking). Feedback loops
+are allowed and get a one-block delay. Atten is the attenuverter every
+Serge-style patch needs: it scales and offsets CV, and with negative gain it
+turns a feedback loop from runaway into regulation.
+
+## Demo patches
+
+Patches built from feedback rather than sequencing, after Serge patch
+programming and cybernetics (`src/presets/index.ts`):
+
+- **Strange Attractor** — three VCOs FM each other in a ring, one also
+  modulating itself; the patch's own energy, rectified and slewed, opens the VCA.
+- **Axon** — a square LFO is a spike train; its output travels down a delay
+  line used as an axon and arrives back at its own rate input, so each burst
+  re-times the next. The integrated "membrane potential" chirps a voice.
+- **Krell Ouroboros** — two unpatched slews loop at unrelated periods and
+  fade chords in and out; the delay's level is inverted into its own feedback,
+  so quiet passages ring on and loud ones damp themselves.
+- **Homeostat** — after Ashby: two voices in mutual inhibition, each follower
+  inverted into the other's VCA, kept from settling by a slow disturbance.
+- **Rectified Reflex** — a VCO rectified into its own FM input, dragged
+  through regimes by a saw LFO; the delay's wetness follows its own level.
+
+## Architecture
+
+The UI is a plain model–view–controller split; the DOM is never the source of truth.
+
+- **Model** — `src/model/`
+  - `graph.ts`: pure operations on the patch (`createModule`, `connect`, `deleteModule`, …).
+  - `ports.ts`, `params.ts`: per-module port lists, parameter ranges and defaults.
+  - `geometry.ts`: node sizes and port anchor positions derived from the model, so
+    cables are drawn without measuring the DOM.
+  - `layout.ts`: layered auto-layout (cycle-safe longest-path columns, barycenter
+    ordering) for patches that carry no positions, e.g. random ones.
+  - `hash.ts`: URL-fragment serialization for share links.
+- **Controller** — `src/hooks/`
+  - `useGraphState.ts`: owns the graph and exposes the actions views dispatch.
+  - `useAudioEngine.ts`: AudioWorklet lifecycle. Adding/removing modules or
+    cables reloads the engine graph; parameter edits are diffed into `setParam`
+    messages; moving nodes never touches it.
+- **View** — `src/components/`
+  - `board/Board.tsx`, `DraggableNode.tsx`, `Edge.tsx`, `SelectionBox.tsx`: the
+    SpaceNotes canvas, adapted to port-to-port cables.
+  - `ModuleCard.tsx`, `board/Port.tsx`, `Scope.tsx`: a module node with ports,
+    sliders and a live oscilloscope.
+- **Engine** — `src/worklet/`: `ModularProcessor` runs every module's DSP in one
+  AudioWorklet, with a `setParam` message that lets modules re-read params in
+  place via `applyParams`.
+
+## Scripts
+
+```bash
+npm run dev         # dev server
+npm run build       # type-check + production build (dist/)
+npm run preview     # serve dist/
+npm run lint        # eslint
+npm run type-check  # app + worklet type-check
+```
+
+## Deploying
+
+This is no longer a plain static site: the browser can't run `src/main.tsx`
+directly, so the host has to run `npm run build` and serve `dist/`. Serving
+the repo root gives a blank page and a "MIME type of application/octet-stream"
+error for the module script.
+
+**Cloudflare Pages (git integration)**, which is what smod.pages.dev uses:
+in the Pages project go to *Settings → Builds & deployments → Build
+configuration* and set the build command to `npm run build` and the build
+output directory to `dist`, then retry the latest deployment. `.node-version`
+pins Node 22 so Vite can build there.
+
+**From a terminal**: `npm run deploy` builds and runs `wrangler pages deploy dist`.
+
+**Anything else**: `npm run build` and upload `dist/`.
+
+## Notes
+
+- AudioWorklet needs a user gesture, so audio starts only after pressing Play.
+- The Output module soft-clips with `tanh(signal × drive)`. At the default
+  drive of 0.2 the engine's nominal 5V lands at about 0.76 full scale, a gentle
+  rounding; turn drive up on the Output node for saturation.
+
+## License
+
+MIT. See `MIT-LICENSE.txt`.
