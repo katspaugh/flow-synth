@@ -4,6 +4,8 @@ Node-based modular synthesizer for the browser. The whole patch runs inside a
 single `AudioWorkletProcessor`; the canvas UI is a React port of the board from
 [SpaceNotes](https://github.com/katspaugh/spacenotes).
 
+[Live demo](https://smod.pages.dev/)
+
 ## Usage
 
 ```bash
