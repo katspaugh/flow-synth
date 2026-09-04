@@ -80,7 +80,8 @@ The UI is a plain model–view–controller split; the DOM is never the source o
   - `ports.ts`, `params.ts`: per-module port lists, parameter ranges and defaults.
   - `geometry.ts`: node sizes and port anchor positions derived from the model, so
     cables are drawn without measuring the DOM.
-  - `layout.ts`: auto-layout for patches that carry no positions (e.g. random ones).
+  - `layout.ts`: layered auto-layout (cycle-safe longest-path columns, barycenter
+    ordering) for patches that carry no positions, e.g. random ones.
   - `hash.ts`: URL-fragment serialization for share links.
 - **Controller** — `src/hooks/`
   - `useGraphState.ts`: owns the graph and exposes the actions views dispatch.
